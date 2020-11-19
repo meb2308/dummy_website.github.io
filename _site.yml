@@ -1,0 +1,12 @@
+name: "Meghan Bellerose"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+    - text: "Paid Leave Predictor"
+      href: shiny_charts.html
+    - text: "Paid Leave Maps"
+      href: shiny_maps.html
+output:
+  html_document:
+    theme: flatly

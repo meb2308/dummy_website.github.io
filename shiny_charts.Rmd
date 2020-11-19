@@ -1,0 +1,59 @@
+---
+title: "Paid Leave Predictor"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
+    runtime: shiny
+---
+
+```{r}
+library(tidyverse)
+library(p8105.datasets)
+library(plotly)
+library(flexdashboard)
+library(shiny)
+```
+
+```{r}
+borough_choices = 
+  merged_wfls %>% 
+  pull(borough) %>%  
+  unique()
+
+selectInput(
+  "borough",
+  h3("Borough Choice"),
+  choices = borough_choices,
+  selected = "Manhattan"
+)
+
+sliderInput(
+  "leave_weeks",
+  h3("Weeks of Paid Leave"),
+  0,25,
+  value = c(0,25))
+
+race = merged_wfls %>% 
+  pull(race) %>% unique()
+
+  
+```
+
+```{r}
+merged_wfls %>% 
+  drop_na(race) %>% 
+  group_by(leave_weeks, race) %>%
+  summarize(mean_leave_weeks = mean(leave_weeks)) %>%
+  mutate(race = fct_reorder(race, mean_leave_weeks)) %>%
+  ggplot(aes(x = race, fill = race)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5, hjust =1), legend.position = "none") +
+  labs(
+    title = "Average weeks of maternity leave by race",
+    x = "Race",
+    y = "Mean weeks of leave"
+  )
+```
+
